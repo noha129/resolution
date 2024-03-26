@@ -2,7 +2,7 @@ import re
 def fix_spaces(text):
     # Replace multiple consecutive spaces with a single space
     return re.sub(r'\s+', ' ', text).strip()
-
+#####################################################################################################################################
 def eliminate_implication(statement):
     # Initialize iteration count
     iteration = 1
@@ -38,13 +38,22 @@ def eliminate_implication(statement):
 # # Apply elimination of implication
 # result=eliminate_implication(original_statement)
 # print(result)
-
+####################################################################################################################################
 def de_morgan_law(s):
     symbols = ['p', 'Q', 'S','R']
     # Check if '!' appears before '('
     get_not = s.find('¬')
     part = s.find('(', get_not)
     if '¬' in s and s.index('¬') < s.index('('):
+        if  '¬∃' in s :
+          s=s.replace('∃','temp')
+          s=s.replace('∃','∀')
+          s=s.replace('temp','∀')
+        elif '∀' in s:
+          s=s.replace('∀','temp')
+          s=s.replace('∀','∃') 
+          s=s.replace('temp','∃') 
+
         #s = s.replace('¬', '')
         # Replace '&' with '|', and vice versa
         s = s.replace('∧', 'temp')  # Replace '&' with a temporary placeholder
@@ -53,14 +62,23 @@ def de_morgan_law(s):
         for symbol in symbols:
             s = s.replace(symbol, '¬' + symbol)  # Add '¬' before each symbol occurrence
         s=s[:get_not]+s[get_not+1:]
+
     return s
-# s = "(¬p(x)∧(Q(x)∨¬R(x)))"
+#s = "(¬p(x)∧(Q(x)∨¬R(x)))"
 # processed_s = de_morgan_law(s)
 # print("s",processed_s)
-# s2 = "¬(¬p(x)∧(Q(x)∨¬R(x)))"
+# s2 = "¬∃(¬p(x)∧(Q(x)∨¬R(x)))"
 # processed_s = de_morgan_law(s2)
 # print("s2",processed_s)
 
+# s3 = "¬∀(¬p(x)∧(Q(x)∨¬R(x)))"
+# processed_s = de_morgan_law(s3)
+# print("s3",processed_s)
+
+# s4 = "¬(¬p(x)∧(Q(x)∨¬R(x)))"
+# processed_s = de_morgan_law(s4)
+# print("s4",processed_s)
+#####################################################################################
 def remove_double_negations(s):
     # Remove all occurrences of '!!'
     while '¬¬' in s:
@@ -73,7 +91,7 @@ def remove_double_negations(s):
 # s = '(Q(x))^ ¬¬(p(x))'
 # processed_s = remove_double_negations(s)
 # print(processed_s)
-
+#########################################################################################
 def move_quantifiers_left(expression):
     quantifiers = ""
     predicates = ""
@@ -97,7 +115,7 @@ def move_quantifiers_left(expression):
 # expression = "(∀x P(x)) ∨ (∃y Q(y))"
 # modified_expression = move_quantifiers_left(expression)
 # print(modified_expression)
-
+########################################################################################################
 def skolemization(expression):
     flag = False
     new_expression = expression  # Initialize new expression
@@ -130,7 +148,7 @@ def skolemization(expression):
 # # expression = "∃z P(x) ∨ Q(y) p(y) p(z)"
 # modified_expression = skolemization(expression)
 # print(modified_expression)
-
+##########################################################################################################################
 def EliminateUniversalQuantifiers(expression):
     new_expression = " "
     for i in range(len(expression)):
@@ -145,7 +163,7 @@ def EliminateUniversalQuantifiers(expression):
 # expression = "∀y ∀y P(A) ∨ ∀yQ(y)"
 # modified_expression =  EliminateUniversalQuantifiers(expression)
 # print(modified_expression)
-
+##################################################################################################################################
 def distribute_cnf(expression):
     parts = expression.split("∨")
     left = parts[0].strip()  # Remove leading/trailing whitespaces
@@ -163,7 +181,7 @@ def distribute_cnf(expression):
 # expression = "P(A) ∨ (Q(A)∧ R(A))"
 # modified_expression = distribute_cnf(expression)
 # print(modified_expression)
-
+#############################################################################################################################
 def convert_to_clauses(expression):
     clauses = []
     var_counter = {}
@@ -188,7 +206,8 @@ def convert_to_clauses(expression):
 # expression = "(p ∨ q) ∧ (r ∨ c) ∧ (r ∨ c) ∧(p ∨ q ) ∧(p ∨ q ))"
 # clauses = convert_to_clauses(expression)
 # print("Clauses:", clauses)
-
+############################################################################################################
+#Test 
 expression = "∃x ∀z ∃y ((ρ(y)->(Q(z)->(P(x)->Q(y)))"
 print("Steps for Eliminate implication: ")
 implication=eliminate_implication(expression) #1
