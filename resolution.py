@@ -165,18 +165,20 @@ def EliminateUniversalQuantifiers(expression):
 # print(modified_expression)
 ##################################################################################################################################
 def distribute_cnf(expression):
-    parts = expression.split("∨")
-    left = parts[0].strip()  # Remove leading/trailing whitespaces
-    right = parts[1].strip("()").strip()  # Remove leading/trailing parentheses and whitespaces
+    if "∨" in expression:
+        parts = expression.split("∨")
+        left = parts[0].strip()  # Remove leading/trailing whitespaces
+        right = parts[1].strip("()").strip()  # Remove leading/trailing parentheses and whitespaces
 
-    conjuncts = right.split("∧")
+        conjuncts = right.split("∧")
 
-    cnf = []
-    for conj in conjuncts:
-        cnf.append("(" + left + " ∨ " + conj.strip() + ")")
+        cnf = []
+        for conj in conjuncts:
+            cnf.append("(" + left + " ∨ " + conj.strip() + ")")
 
-    return " ∧ ".join(cnf)
-
+        return " ∧ ".join(cnf)
+    else:
+        return expression
 
 # expression = "P(A) ∨ (Q(A)∧ R(A))"
 # modified_expression = distribute_cnf(expression)
