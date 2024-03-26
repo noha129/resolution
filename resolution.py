@@ -208,9 +208,13 @@ def convert_to_clauses(expression):
 # print("Clauses:", clauses)
 ############################################################################################################
 #Test 
-expression = "∃x ∀z ∃y ((ρ(y)->(Q(z)->(P(x)->Q(y)))"
+expression = "∃x∀z∀y((R(y)->(Q(z)->(R(x)->Q(y)))"
+#to prove resolution 
+#the first add negation for this expression
+
+negated_expression = '¬' + expression
 print("Steps for Eliminate implication: ")
-implication=eliminate_implication(expression) #1
+implication=eliminate_implication(negated_expression) #1
 demorgan=de_morgan_law(implication)                   #2
 removeDN=remove_double_negations(demorgan)            #3
 moveQuan=move_quantifiers_left(removeDN)              #5
