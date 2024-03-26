@@ -80,12 +80,11 @@ def de_morgan_law(s):
 # print("s4",processed_s)
 #####################################################################################
 def remove_double_negations(s):
-    # Remove all occurrences of '!!'
-    while '¬¬' in s:
-        index_double_negation = s.find('¬¬')
-        index_open_paren = s.find('(', index_double_negation + 1)  # Find '(' after the first '!'
-        s = s.replace('¬¬', '')  # Remove '!!'
-    return s
+  if '¬¬' in s:
+    s = s.replace('¬¬', '') 
+  elif '¬ ¬' in s:
+     s = s.replace('¬ ¬', '')  
+  return s
 
 # # Example usage:
 # s = '(Q(x))^ ¬¬(p(x))'
