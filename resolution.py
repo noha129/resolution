@@ -49,7 +49,7 @@ def de_morgan_law(s):
           s=s.replace('∃','temp')
           s=s.replace('∃','∀')
           s=s.replace('temp','∀')
-        elif '∀' in s:
+        elif '¬∀' in s:
           s=s.replace('∀','temp')
           s=s.replace('∀','∃') 
           s=s.replace('temp','∃') 
