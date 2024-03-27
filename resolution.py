@@ -243,8 +243,54 @@ def convert_to_clauses(expression):
 # clauses = convert_to_clauses(expression)
 # print("Clauses:", clauses)
 ############################################################################################################
+def resolve(clauses):
+    new_clauses = set()
+    for i in range(len(clauses)):
+        for j in range(i+1, len(clauses)):
+            resolvents = resolve_helper(clauses[i], clauses[j])
+            if () in resolvents:
+                return True
+            for resolvent in resolvents:
+                new_clauses.add(tuple(resolvent))
+    if all(tuple(c) in clauses for c in new_clauses):
+        return False
+    else:
+        return resolve(new_clauses)
+
+def resolve_helper(clause1, clause2):
+    resolvents = []
+    for literal in clause1:
+        neg_literal = ('¬' + literal[0], literal[1])
+        if neg_literal in clause2:
+            resolvent = [l for l in clause1 if l != literal] + [l for l in clause2 if l != neg_literal]
+            resolvents.append(resolvent)
+    return resolvents
+
+def negated_cnf_clauses(cnf_clauses):
+    negated_clauses = []
+    for clause in cnf_clauses:
+        negated_clause = []
+        for literal in clause:
+            negated_clause.append(('¬' + literal[0], literal[1]))
+        negated_clauses.append(negated_clause)
+    return negated_clauses
+
+def resolution_prove(cnf_clauses):
+    negated = negated_cnf_clauses(cnf_clauses)
+    return resolve(negated)
+
+# Example usage
+
+
+
+
+
+# Example usage:
+# cnf_clauses = [["¬P(w) ∨ Q(w)", "¬Q(y) ∨ S(y)", "P(x) ∨ R(x)", "¬R(z) ∨ S(z)"]]
+# print(resolution_prove(cnf_clauses))
+####################################################################################################
 #Test 
-expression = "∃x∀z∀y((R(y)->(Q(z)->(R(x)->Q(y)))"
+expression = "∃x∀z∀y((P(y)->(Q(z)->(R(x)->S(y)))"
 #to prove resolution 
 #the first add negation for this expression
 
@@ -266,3 +312,4 @@ print("Apply Skolemization for existential quantifiers: ", skol,'\n')
 print("apply Eliminate for universal quantifiers: ", Eli_univer,'\n')
 print("Convert expression to conjunctive normal form: ", convert_conForm,'\n')
 print("Clauses:", clauses)
+print(resolution_prove(clauses))
