@@ -137,16 +137,18 @@ def skolemization(expression):
             if flag:
                   new_expression = new_expression.replace('∃F'+str(k)+'(' + new_variable + ')' , "")
             else:
-                 new_expression = new_expression.replace('∃F'+str(k)+'(A)')
+                 new_expression = new_expression.replace('∃F'+str(k)+'(A)'," ")
 
 
     return fix_spaces(new_expression)
 
-# # Test the function
-# expression = "∀x ∃y ∃z P(x) ∨ Q(y) p(y) p(z)"
-# # expression = "∃z P(x) ∨ Q(y) p(y) p(z)"
-# modified_expression = skolemization(expression)
-# print(modified_expression)
+# Test the function
+expression = "∀x ∃y ∃z P(x) ∨ Q(y) p(y) p(z)"
+# expression="∃z P(x) ∨ Q(y) p(y) p(z)"
+# expression = "∃z P(x) ∨ Q(y) p(y) p(z)"
+modified_expression = skolemization(expression)
+print(modified_expression)
+
 ##########################################################################################################################
 def EliminateUniversalQuantifiers(expression):
     new_expression = " "
@@ -164,24 +166,32 @@ def EliminateUniversalQuantifiers(expression):
 # print(modified_expression)
 ##################################################################################################################################
 def distribute_cnf(expression):
-    if "∨" in expression:
-        parts = expression.split("∨")
-        left = parts[0].strip()  # Remove leading/trailing whitespaces
-        right = parts[1].strip("()").strip()  # Remove leading/trailing parentheses and whitespaces
-
-        conjuncts = right.split("∧")
-
-        cnf = []
-        for conj in conjuncts:
-            cnf.append("(" + left + " ∨ " + conj.strip() + ")")
-
-        return " ∧ ".join(cnf)
-    else:
+    if '∨' not in expression:  # Check if disjunction (∨) exists in the expression
         return expression
 
-# expression = "P(A) ∨ (Q(A)∧ R(A))"
-# modified_expression = distribute_cnf(expression)
-# print(modified_expression)
+    parts = expression.split("∨")
+    left = parts[0].strip()  # Remove leading/trailing whitespaces
+    right = parts[1].strip("()")  # Remove leading/trailing parentheses
+
+    conjuncts = right.split("∧")
+    if len(conjuncts) == 1:
+        return expression
+    else:
+        conjuncts = [conj.replace('(', "").strip() for conj in conjuncts]  # Remove '(' and strip whitespaces
+        cnf = []
+        for conj in conjuncts:
+            conj = conj.strip()  # Strip whitespaces
+            if conj.startswith('∨'):
+                cnf.append("(" + left.strip() + conj.strip() + ")")  # Avoid redundant parentheses
+            else:
+                cnf.append("(" + left.strip() + " ∨ " + conj.strip() + ")")  # Add missing disjunction
+
+    return " ∧ ".join(cnf)
+
+
+# Test case
+expression1 = "p ∨ (q ∧ r)"
+print(distribute_cnf(expression1))  # Output: "(p ∨ q ∨ r)"
 #############################################################################################################################
 def convert_to_clauses(expression):
     clauses = []
