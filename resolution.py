@@ -40,19 +40,19 @@ def eliminate_implication(statement):
 # print(result)
 ####################################################################################################################################
 def de_morgan_law(s):
-    symbols = ['P', 'Q', 'S','R']
+    symbols = ['p', 'Q', 'S','R']
     # Check if '!' appears before '('
     get_not = s.find('¬')
     part = s.find('(', get_not)
     if '¬' in s and s.index('¬') < s.index('('):
-        if  '¬∃' in s :
-          s=s.replace('∃','temp')
-          s=s.replace('∃','∀')
-          s=s.replace('temp','∀')
+        if '¬∃' in s:
+           replacements = {'∃': '∀', '∀': '∃'}
+           s = ''.join(replacements.get(c, c) for c in s)
+
+
         elif '¬∀' in s:
-          s=s.replace('∀','temp')
-          s=s.replace('∀','∃') 
-          s=s.replace('temp','∃') 
+          replacements = {'∀': '∃', '∃': '∀'}
+          s = ''.join(replacements.get(c, c) for c in s)
 
         #s = s.replace('¬', '')
         # Replace '&' with '|', and vice versa
@@ -70,14 +70,13 @@ def de_morgan_law(s):
 # s2 = "¬∃(¬p(x)∧(Q(x)∨¬R(x)))"
 # processed_s = de_morgan_law(s2)
 # print("s2",processed_s)
-
-# s3 = "¬∀(¬p(x)∧(Q(x)∨¬R(x)))"
+# s3 = "¬∃∀(¬p(x)∧(Q(x)∨¬R(x)))"
 # processed_s = de_morgan_law(s3)
 # print("s3",processed_s)
-
 # s4 = "¬(¬p(x)∧(Q(x)∨¬R(x)))"
 # processed_s = de_morgan_law(s4)
 # print("s4",processed_s)
+
 #####################################################################################
 def remove_double_negations(s):
   if '¬¬' in s:
