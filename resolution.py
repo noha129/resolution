@@ -91,6 +91,32 @@ def remove_double_negations(s):
 # processed_s = remove_double_negations(s)
 # print(processed_s)
 #########################################################################################
+import re
+
+def standardize_expression(expression):
+    var_counter = {}
+    
+    def replace_var(match):
+        nonlocal var_counter
+        var = match.group(0)
+        if var not in var_counter:
+            var_counter[var] = 1
+        else:
+            var_counter[var] += 1
+            var = f'{var}{var_counter[var]}'
+        return var
+    
+    pattern = r'[a-zA-Z]+'
+    standardized_expression = re.sub(pattern, replace_var, expression)
+    
+    return standardized_expression
+
+# Test the function with the provided expression
+expression = "∃x∀x∀z((ρ(y)->(Q(z)->(P(x)->Q(x))))"
+standardized_expression = standardize_expression(expression)
+print(standardized_expression)
+################################################################################
+
 def move_quantifiers_left(expression):
     quantifiers = ""
     predicates = ""
