@@ -40,7 +40,7 @@ def eliminate_implication(statement):
 # print(result)
 ####################################################################################################################################
 def de_morgan_law(s):
-    symbols = ['p', 'Q', 'S','R']
+    symbols = ['P', 'Q', 'S','R']
     # Check if '!' appears before '('
     get_not = s.find('¬')
     part = s.find('(', get_not)
